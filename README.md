@@ -27,6 +27,7 @@
 
 ## 🔥News
 
+- [2024/07/18] 从基于 MedicalGPT 的模型定制出发, 重新理解模型对齐所有的细节，包括IPT/SFT/RLHF。
 - [2024/07/12] 完成实战营入门岛作业 [github](https://github.com/1587causalai/InternLM-Tutorial-Personalized-LLM-Research-Assistent)
 - [2024/07/04] 参考[MedicalGPT](https://github.com/shibing624/MedicalGPT)完成模型训练(IPT/SFT/RLHF)流程。
 - [2024/07/02] 李宏毅老师的课程课程笔记基本完成。
