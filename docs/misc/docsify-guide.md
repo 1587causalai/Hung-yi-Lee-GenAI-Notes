@@ -136,7 +136,7 @@ docsify serve docs
 
 1. **页面显示 404**
    - 检查文件是否确实在 `docs` 目录下
-   - 确认文件名和路径大小写是否匹配
+   - 确认文件名和路径大小写是否���配
    - 验证链接格式是否正确
 
 2. **侧边栏不显示**
@@ -162,4 +162,113 @@ docsify serve docs
 - [Docsify 主题](https://docsify.js.org/#/themes)
 - [Docsify 插件列表](https://docsify.js.org/#/plugins)
 
-记住，选择工具的关键是要符合实际需求。对于我们的课程笔记项目来说，Docsify 的轻量级和即时预览特性正是我们所需要的。 
+记住，选择工具的关键是要符合实际需求。对于我们的课程笔记项目来说，Docsify 的轻量级和即时预览特性正是我们所需要的。
+
+## 部署方案
+
+在完成本地开发后，我们需要让其他人也能访问到我们的文档。GitHub Pages 是一个很好的选择，它免费、易用，而且和我们的开发流程完美集成。
+
+### GitHub Pages 自动部署
+
+#### 1. 准备工作
+首先，确保你的仓库中包含以下文件：
+- `index.html`（Docsify 配置文件）
+- `README.md`（首页内容）
+- `_sidebar.md`（如果使用侧边栏）
+- `.nojekyll`（防止 GitHub Pages 忽略下划线开头的文件）
+
+#### 2. 创建 GitHub Actions 工作流
+在仓库根目录创建 `.github/workflows/deploy.yml` 文件：
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 或者是你的默认分支
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Dependencies
+        run: npm install -g docsify-cli
+
+      - name: Build
+        run: |
+          # 如果需要构建步骤，可以在这里添加
+          echo "No build step required for Docsify"
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages  # 部署到 gh-pages 分支
+          folder: .         # 部署整个目录
+          clean: true      # 清理旧文件
+```
+
+#### 3. 启用 GitHub Pages
+1. 进入仓库设置 Settings > Pages
+2. Source 选择 "Deploy from a branch"
+3. Branch 选择 "gh-pages" 分支，文件夹选择 "/ (root)"
+4. 点击 Save
+
+#### 4. 自动部署流程
+当你推送代码到 main 分支时：
+1. GitHub Actions 会自动触发部署工作流
+2. 工作流会创建/更新 gh-pages 分支
+3. GitHub Pages 会自动从 gh-pages 分支部署网站
+4. 部署完成后可以通过 `https://<username>.github.io/<repository>` 访问
+
+#### 5. 私有仓库说明
+对于私有仓库，你需要：
+- 升级到 GitHub Pro/Team/Enterprise
+- 或者使用其他部署方案（如 Vercel、Netlify）
+- 或者考虑使用 GitLab（支持私有仓库的 Pages）
+
+#### 6. 自定义域名（可选）
+如果你想使用自己的域名：
+1. 在仓库设置中添加自定义域名
+2. 创建 `CNAME` 文件，内容为你的域名
+3. 在域名提供商处添加相应的 DNS 记录
+
+#### 7. 部署检查
+部署完成后，你可以：
+- 在 Actions 标签页查看部署状态
+- 在 Settings > Pages 查看部署 URL
+- 检查 gh-pages 分支是否正确更新
+
+### 其他部署选项
+
+除了 GitHub Pages，还有其他一些流行的部署选项：
+
+1. **Vercel**
+   - 支持自动部署
+   - 提供免费的 SSL 证书
+   - 全球 CDN 加速
+
+2. **Netlify**
+   - 简单的拖放部署
+   - 自动构建和部署
+   - 提供免费套餐
+
+3. **GitLab Pages**
+   - 支持私有仓库
+   - 集成 CI/CD
+   - 配置灵活
+
+选择哪种部署方案主要取决于你的具体需求：
+- 如果是开源项目，GitHub Pages 是最简单的选择
+- 如果需要更好的访问速度，可以考虑 Vercel 或 Netlify
+- 如果是私有项目，可以考虑 GitLab Pages 或付费方案
+
+记住，无论选择哪种部署方案，Docsify 的零构建特性都能让部署过程变得更加简单和快速。 
