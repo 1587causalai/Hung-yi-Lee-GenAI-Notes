@@ -18,8 +18,8 @@
       auto2top: true,
       loadNavbar: true,
       subMaxLevel: 3,
-      basePath: '/Hung-yi-Lee-GenAI-2024-Notes/',
-      nameLink: '/Hung-yi-Lee-GenAI-2024-Notes/',
+      basePath: location.hostname === 'localhost' ? '/' : '/Hung-yi-Lee-GenAI-2024-Notes/',
+      nameLink: location.hostname === 'localhost' ? '/' : '/Hung-yi-Lee-GenAI-2024-Notes/',
       search: {
         paths: 'auto',
         placeholder: '搜索',
